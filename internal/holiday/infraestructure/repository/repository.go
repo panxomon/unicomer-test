@@ -3,45 +3,62 @@ package repository
 import (
 	"context"
 	"encoding/json"
-	"time"
-
-	"github.com/rs/zerolog/log"
+	"fmt"
 	"net/http"
+	"time"
 	"unicomer-test/internal/holiday/domain"
 )
 
-type HolidayRepository struct {
-	url string
+type holidayRepository struct {
+	data *domain.HolidayResponse
 }
 
-func NewHolidayRepository(url string) domain.HolidayRepository {
-	return &HolidayRepository{
-		url: url,
-	}
-}
+func MakeHolidayRepository(url string) (domain.HolidayRepository, error) {
 
-func (h *HolidayRepository) Retrieve(ctx context.Context) ([]domain.Holiday, error) {
-	res, err := http.Get(h.url)
+	res, err := http.Get(url)
 	if err != nil {
-		log.Ctx(ctx).Err(err).Err(err).Msg("error while get data")
+		return nil, fmt.Errorf("error while getting data: %v", err)
 	}
-
 	defer res.Body.Close()
 
-	var result struct {
-		Status string           `json:"status"`
-		Data   []domain.Holiday `json:"data"`
+	if res.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("non-OK status code received: %d", res.StatusCode)
 	}
 
-	if err := json.NewDecoder(res.Body).Decode(&result); err != nil {
-		log.Ctx(ctx).Err(err).Msg("error while decode response")
+	var tempData map[string]interface{}
+	if err := json.NewDecoder(res.Body).Decode(&tempData); err != nil {
+		return nil, fmt.Errorf("error while decoding response: %v", err)
 	}
 
-	// Parse dates
-	for i, holiday := range result.Data {
-		date, _ := time.Parse("2006-01-02", holiday.Date.Format("2006-01-02"))
-		result.Data[i].Date = date
+	data := domain.HolidayResponse{
+		Status: tempData["status"].(string),
+	}
+	holidays := make([]domain.Holiday, 0)
+	for _, holidayData := range tempData["data"].([]interface{}) {
+		holidayMap := holidayData.(map[string]interface{})
+		DateStr := holidayMap["date"].(string)
+		Date, err := time.Parse("2006-01-02", DateStr)
+		if err != nil {
+			// Manejar el error de conversión de fecha
+		}
+		holiday := domain.Holiday{
+			Date:        Date,
+			Title:       holidayMap["title"].(string),
+			Type:        holidayMap["type"].(string),
+			Inalienable: holidayMap["inalienable"].(bool),
+			Extra:       holidayMap["extra"].(string),
+		}
+		holidays = append(holidays, holiday)
+	}
+	data.Data = holidays
+
+	repo := &holidayRepository{
+		data: &data,
 	}
 
-	return result.Data, nil
+	return repo, nil
+}
+
+func (r *holidayRepository) Retrieve(ctx context.Context) (*domain.HolidayResponse, error) {
+	return r.data, nil
 }

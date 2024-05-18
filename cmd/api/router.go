@@ -4,32 +4,33 @@ import (
 	"context"
 	"github.com/gin-gonic/gin"
 	"net/http"
-
 	bootstrap "unicomer-test/cmd/bootstrap"
+	"unicomer-test/internal/endpoint"
 )
 
 type Key string
 
 const BootstrapKey Key = "bootstrap"
 
-func SetUpRoutes(basePath string, components *bootstrap.Bootstrap) {
-
-}
-
-func SetupRouter(components *bootstrap.Bootstrap) *gin.Engine {
+func SetupRouter(basePath string, components *bootstrap.Bootstrap) *gin.Engine {
 	r := gin.Default()
 
 	r.GET("/health", HealthCheck)
-	r.GET("/holidays")
+	r.GET(basePath, BootstrapMiddleware(components))
+
+	r.GET("test", func(c *gin.Context) {
+		endpoint.NewEndpoint(components.Holidays).Invoke(c)
+	})
 
 	return r
 }
 
-// BootstrapMiddleware inyecta el componente Bootstrap en el contexto de Gin.
-func BootstrapMiddleware(bootstrap *bootstrap.Bootstrap) gin.HandlerFunc {
+func BootstrapMiddleware(components *bootstrap.Bootstrap) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		ctx := context.WithValue(c.Request.Context(), BootstrapKey, bootstrap)
+		ctx := context.WithValue(c.Request.Context(), BootstrapKey, components)
+		endpoint.NewEndpoint(components.Holidays).Invoke(c)
 		c.Request = c.Request.WithContext(ctx)
+
 		c.Next()
 	}
 }

@@ -6,7 +6,7 @@ import (
 	"unicomer-test/internal/holiday/domain"
 )
 
-type HolidayFindQueryHandler cqrs.QueryHandler[HolidayFindQuery, *domain.Holiday]
+type HolidayFindQueryHandler cqrs.QueryHandler[HolidayFindQuery, []domain.Holiday]
 type holidayFindQueryHandler struct {
 	finder domain.HolidayFindQuery
 }
@@ -15,6 +15,6 @@ func NewHolidayFindQueryHandler(query domain.HolidayFindQuery) HolidayFindQueryH
 	return &holidayFindQueryHandler{finder: query}
 }
 
-func (h *holidayFindQueryHandler) Handle(ctx context.Context, query HolidayFindQuery) (*domain.Holiday, error) {
+func (h *holidayFindQueryHandler) Handle(ctx context.Context, query HolidayFindQuery) ([]domain.Holiday, error) {
 	return h.finder.Execute(ctx, query.HolidayType, query.Date)
 }

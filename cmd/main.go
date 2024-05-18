@@ -14,9 +14,12 @@ func main() {
 		log.Fatal().Err(err).Msg("failed to load env vars")
 	}
 
-	components := bootstrap.LoadComponents(cfg.UrlHolidays)
+	components, err := bootstrap.LoadComponents(cfg.UrlHolidays)
+	if err != nil {
+		log.Fatal().Err(err).Msg("failed to load env vars")
+	}
 
-	r := router.SetupRouter(components)
+	r := router.SetupRouter(cfg.BasePath, components)
 
 	log.Info().Msg("Starting server on :8080")
 

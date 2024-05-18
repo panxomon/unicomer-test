@@ -13,10 +13,15 @@ type Holiday struct {
 	Extra       string    `json:"extra" xml:"extra"`
 }
 
+type HolidayResponse struct {
+	Status string    `json:"status"`
+	Data   []Holiday `json:"data"`
+}
+
 type HolidayFindQuery interface {
-	Execute(ctx context.Context, holidayType string, date time.Time) (*Holiday, error)
+	Execute(ctx context.Context, holidayType string, date time.Time) ([]Holiday, error)
 }
 
 type HolidayRepository interface {
-	Retrieve(ctx context.Context) ([]Holiday, error)
+	Retrieve(ctx context.Context) (*HolidayResponse, error)
 }
