@@ -1,0 +1,51 @@
+{
+	"info": {
+		"_postman_id": "313e6969-57ec-4503-85d9-273a37cb869a",
+		"name": "unicomer-test",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "597927"
+	},
+	"item": [
+		{
+			"name": "holiday",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "holiday-service",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/holiday/v1?start=2024-01-01&end=2024-08-31&type=Civil",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"holiday",
+						"v1"
+					],
+					"query": [
+						{
+							"key": "start",
+							"value": "2024-01-01"
+						},
+						{
+							"key": "end",
+							"value": "2024-08-31"
+						},
+						{
+							"key": "type",
+							"value": "Civil"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
