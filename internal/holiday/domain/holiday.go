@@ -14,8 +14,8 @@ type Holiday struct {
 }
 
 type HolidayResponse struct {
-	Status string    `json:"status"`
-	Data   []Holiday `json:"data"`
+	Status string    `json:"status" xml:"status"`
+	Data   []Holiday `json:"data" xml:"data"`
 }
 
 type HolidayFindQuery interface {

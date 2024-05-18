@@ -29,7 +29,7 @@ func (h *Holidays) Invoke(c *gin.Context) error {
 	typeFilter := c.Query("type")
 	startDate := c.Query("start")
 	endDate := c.Query("end")
-	acceptHeader := c.GetHeader("Accept")
+	acceptHeader := c.GetHeader("Content-Type")
 
 	holidays, err := h.FilterHolidays(ctx, typeFilter, startDate, endDate)
 	if err != nil {
