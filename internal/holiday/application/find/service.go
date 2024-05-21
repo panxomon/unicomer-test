@@ -3,7 +3,6 @@ package find
 import (
 	"context"
 	"github.com/rs/zerolog/log"
-	"time"
 	"unicomer-test/internal/holiday/domain"
 )
 
@@ -17,7 +16,7 @@ func NewHolidayFinder(repository domain.HolidayRepository) domain.HolidayFindQue
 	}
 }
 
-func (c *HolidayFinderService) Execute(ctx context.Context, holidayType string, date time.Time) ([]domain.Holiday, error) {
+func (c *HolidayFinderService) Execute(ctx context.Context) ([]domain.Holiday, error) {
 	holidaysResp, err := c.repository.Retrieve(ctx)
 	if err != nil {
 		log.Ctx(ctx).Err(err).Str("codebase", "find").Msg("failed executing")

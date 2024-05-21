@@ -6,7 +6,6 @@ import (
 	"github.com/rs/zerolog/log"
 	"net/http"
 	"strings"
-	"sync"
 	"time"
 	holiday "unicomer-test/internal/holiday/application"
 	"unicomer-test/internal/holiday/application/find"
@@ -14,7 +13,6 @@ import (
 )
 
 type Holidays struct {
-	wg         sync.WaitGroup
 	holidayApp *holiday.App
 }
 
@@ -33,7 +31,7 @@ func (h *Holidays) Invoke(c *gin.Context) error {
 
 	holidays, err := h.FilterHolidays(ctx, typeFilter, startDate, endDate)
 	if err != nil {
-		log.Printf("Failed to filter holidays: %v", err)
+		log.Ctx(ctx).Err(err).Str("project", "holiday").Msg("Failed to filter holidays")
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to filter holidays"})
 		return err
 	}
@@ -51,6 +49,7 @@ func (h *Holidays) FilterHolidays(ctx context.Context, typeFilter, startDate, en
 
 	allHolidays, err := h.holidayApp.Queries.FindCodebase.Handle(ctx, find.HolidayFindQuery{HolidayType: "", Date: time.Time{}})
 	if err != nil {
+		log.Ctx(ctx).Err(err).Str("project", "holiday").Msg("Error retrieving holidays from repository")
 		return nil, err
 	}
 
@@ -62,11 +61,15 @@ func (h *Holidays) FilterHolidays(ctx context.Context, typeFilter, startDate, en
 			filteredHolidays = append(filteredHolidays, holiday)
 		}
 	}
-
+	log.Ctx(ctx).Info().Str("project", "holiday").Int("filtered_holidays_count", len(filteredHolidays)).Msg("Filtered holidays successfully")
 	return filteredHolidays, nil
 }
 
 func parseDate(dateStr string) time.Time {
-	date, _ := time.Parse("2006-01-02", dateStr)
+	date, err := time.Parse("2006-01-02", dateStr)
+	if err != nil {
+		log.Error().Err(err).Str("project", "holiday").Str("date_string", dateStr).Msg("Error parsing date")
+		return time.Time{}
+	}
 	return date
 }
