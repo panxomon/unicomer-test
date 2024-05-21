@@ -11,5 +11,5 @@ func NewApp(queries Queries) *App {
 }
 
 type Queries struct {
-	FindCodebase find.HolidayFindQueryHandler
+	FindHoliday find.HolidayFindQueryHandler
 }

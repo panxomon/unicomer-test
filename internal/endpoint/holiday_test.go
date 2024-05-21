@@ -2,9 +2,6 @@ package endpoint_test
 
 import (
 	"context"
-	"github.com/gin-gonic/gin"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -13,6 +10,10 @@ import (
 	holiday "unicomer-test/internal/holiday/application"
 	"unicomer-test/internal/holiday/application/find"
 	"unicomer-test/internal/holiday/domain"
+
+	"github.com/gin-gonic/gin"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
 func Test_HolidayEndpoint(t *testing.T) {
@@ -49,7 +50,7 @@ func Test_HolidayEndpoint(t *testing.T) {
 		{
 			name: "valid request - JSON response",
 			holidayApp: holiday.NewApp(holiday.Queries{
-				FindCodebase: createMockHandler(mockHolidays, nil),
+				FindHoliday: createMockHandler(mockHolidays, nil),
 			}),
 			queryParams:    "",
 			expectedStatus: http.StatusOK,
@@ -58,7 +59,7 @@ func Test_HolidayEndpoint(t *testing.T) {
 		{
 			name: "valid request - XML response",
 			holidayApp: holiday.NewApp(holiday.Queries{
-				FindCodebase: createMockHandler(mockHolidays, nil),
+				FindHoliday: createMockHandler(mockHolidays, nil),
 			}),
 			queryParams:    "",
 			expectedStatus: http.StatusOK,

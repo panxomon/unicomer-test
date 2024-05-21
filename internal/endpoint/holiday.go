@@ -2,14 +2,15 @@ package endpoint
 
 import (
 	"context"
-	"github.com/gin-gonic/gin"
-	"github.com/rs/zerolog/log"
 	"net/http"
 	"strings"
 	"time"
 	holiday "unicomer-test/internal/holiday/application"
 	"unicomer-test/internal/holiday/application/find"
 	"unicomer-test/internal/holiday/domain"
+
+	"github.com/gin-gonic/gin"
+	"github.com/rs/zerolog/log"
 )
 
 type Holidays struct {
@@ -47,7 +48,7 @@ func (h *Holidays) Invoke(c *gin.Context) error {
 
 func (h *Holidays) FilterHolidays(ctx context.Context, typeFilter, startDate, endDate string) ([]domain.Holiday, error) {
 
-	allHolidays, err := h.holidayApp.Queries.FindCodebase.Handle(ctx, find.HolidayFindQuery{HolidayType: "", Date: time.Time{}})
+	allHolidays, err := h.holidayApp.Queries.FindHoliday.Handle(ctx, find.HolidayFindQuery{HolidayType: "", Date: time.Time{}})
 	if err != nil {
 		log.Ctx(ctx).Err(err).Str("project", "holiday").Msg("Error retrieving holidays from repository")
 		return nil, err

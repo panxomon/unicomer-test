@@ -21,7 +21,7 @@ func LoadComponents(urlHolidaysServer string) (*Bootstrap, error) {
 	holidayService := holidayFind.NewHolidayFinder(holidayRepository)
 	holidayQuery := holidayFind.NewHolidayFindQueryHandler(holidayService)
 
-	holidaysApp := holiday.NewApp(holiday.Queries{FindCodebase: holidayQuery})
+	holidaysApp := holiday.NewApp(holiday.Queries{FindHoliday: holidayQuery})
 
 	return &Bootstrap{
 		Holidays: holidaysApp,
