@@ -1,21 +1,62 @@
 # Holiday Service
 
-Este servicio proporciona información sobre días festivos dentro de un rango de fechas y un tipo específicos.
+This service provides information about holidays within a specific date range and type.
 
-## Ejecución del Servicio
+## Service Execution
 
-### Requisitos Previos
+### Prerequisites
 
-- Go (versión 1.22) instalado en su sistema. Puede descargarlo [aquí](https://golang.org/dl/).
+- Go (version 1.22) installed on your system. You can download it [here](https://golang.org/dl/).
 
-### Pasos para Ejecutar el Servicio
+## Installation
 
-1. **Clonar el Repositorio**
+1. Clone this repository:
 
-   Clone este repositorio en su sistema local:
+```bash
+ git clone https://gitlab.com/united-marmot-association/wizard-generator.git
+```
 
-   ```bash
-   git clone git@github.com:panxomon/unicomer-test.git
+2. Navigate to the project directory:
 
-2. Install Postman to test the endpoints: https://www.postman.com/downloads/
-3. Install Docker Desktop: https://www.docker.com/products/docker-desktop/
+```bash
+ cd unicomer-test
+```
+
+3. Install dependencies:
+
+```bash
+ make dep
+```
+
+
+## Usage 
+
+1. Manage your own environment variables in the file .env (you can use the file .env.example as a template)
+
+```bash
+ cp .env.example .env
+```
+
+2. Run the project:
+
+```bash
+ make run
+```
+
+## Endpoints
+### Generate project
+
+1. Call the API endpoint to generate code:
+
+```bash
+curl --location 'localhost:8080/holiday/v1?start=2024-01-01&end=2024-11-30&type=Religioso' \
+--header 'Content-Type: application/json'
+```
+
+2. ready!
+
+##  Utilities
+
+- postman collection is available to work with the endpoints: `./postman`
+
+
