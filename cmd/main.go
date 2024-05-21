@@ -16,7 +16,7 @@ func main() {
 
 	components, err := bootstrap.LoadComponents(cfg.UrlHolidays)
 	if err != nil {
-		log.Fatal().Err(err).Msg("failed to load env vars")
+		log.Fatal().Err(err).Msg("failed to load components")
 	}
 
 	r := router.SetupRouter(cfg.BasePath, components)

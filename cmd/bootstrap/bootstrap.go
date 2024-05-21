@@ -1,6 +1,7 @@
 package bootstrap
 
 import (
+	"context"
 	"fmt"
 	holiday "unicomer-test/internal/holiday/application"
 	holidayFind "unicomer-test/internal/holiday/application/find"
@@ -12,7 +13,7 @@ type Bootstrap struct {
 }
 
 func LoadComponents(urlHolidaysServer string) (*Bootstrap, error) {
-	holidayRepository, err := holidayrepo.MakeHolidayRepository(urlHolidaysServer)
+	holidayRepository, err := holidayrepo.MakeHolidayRepository(context.Background(), urlHolidaysServer)
 	if err != nil {
 		return nil, fmt.Errorf("error while getting data: %v", err)
 	}

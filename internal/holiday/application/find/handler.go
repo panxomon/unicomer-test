@@ -16,5 +16,5 @@ func NewHolidayFindQueryHandler(query domain.HolidayFindQuery) HolidayFindQueryH
 }
 
 func (h *holidayFindQueryHandler) Handle(ctx context.Context, query HolidayFindQuery) ([]domain.Holiday, error) {
-	return h.finder.Execute(ctx, query.HolidayType, query.Date)
+	return h.finder.Execute(ctx)
 }

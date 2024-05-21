@@ -19,7 +19,7 @@ type HolidayResponse struct {
 }
 
 type HolidayFindQuery interface {
-	Execute(ctx context.Context, holidayType string, date time.Time) ([]Holiday, error)
+	Execute(ctx context.Context) ([]Holiday, error)
 }
 
 type HolidayRepository interface {
