@@ -13,7 +13,7 @@ This service provides information about holidays within a specific date range an
 1. Clone this repository:
 
 ```bash
- git clone https://gitlab.com/united-marmot-association/wizard-generator.git
+ git clone git@github.com:panxomon/unicomer-test.git
 ```
 
 2. Navigate to the project directory:
